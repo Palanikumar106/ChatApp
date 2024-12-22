@@ -24,10 +24,11 @@ async function checkPassword(req, res) {
     });
 
     const cookieOption = {
-      http: true,
-      secure: true,
+      http: true, // Prevent client-side JavaScript from accessing the cookie
+      secure: true, // Only secure in production
+      sameSite: "None", // Allow cross-origin cookie sharing
     };
-    
+
     return res.cookie("token", token, cookieOption).status(200).json({
       message: "Login Successfully",
       token: token,
