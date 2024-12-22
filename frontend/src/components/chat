@@ -1,0 +1,310 @@
+import React, { useEffect, useState } from "react";
+import Avatar from "./Avatar";
+import chatBotImage from "../images/chatbot.png";
+import { Link, useParams } from "react-router-dom";
+import { HiDotsVertical } from "react-icons/hi";
+import { FaAngleLeft } from "react-icons/fa6";
+import backgroundImage from "../images/bottbg.jpg";
+import { FaPlus } from "react-icons/fa6";
+import { IoMdSend } from "react-icons/io";
+import Sidebar from "./Sidebar";
+const Chatbot = ({ onClose }) => {
+  return (
+    <div
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+      className="bg-no-repeat bg-cover"
+    >
+
+      <header className="sticky top-0 h-16 bg-white flex justify-between items-center px-4">
+        <div className="flex items-center gap-4">
+          <Link to={"/"} className="lg:hidden">
+            <FaAngleLeft size={25} />
+          </Link>
+          <div>
+            <Avatar
+              width={50}
+              height={50}
+              imageUrl={chatBotImage}
+              name={"A I"}
+              userId={"39834"}
+            />
+          </div>
+          <div>
+            <h3 className="font-semibold text-lg my-0 text-ellipsis line-clamp-1">
+              {"A I "}
+            </h3>
+            <p className="-my-2 text-sm">
+              {<span className="text-primary">online</span>}
+            </p>
+          </div>
+        </div>
+        <div>
+          <button className="cursor-pointer hover:text-primary">
+            <HiDotsVertical />
+          </button>
+        </div>
+      </header>
+
+      <section className="h-[calc(100vh-128px)] overflow-x-hidden  scrollbar relative bg-slate-200 bg-opacity-50"></section>
+      {/* Message */}
+      <section className="h-16 bg-white flex items-center px-4">
+        <div className="relative ">
+          <button className="flex justify-center items-center w-11 h-11 rounded-full hover:bg-primary hover:text-white">
+            <FaPlus size={20} />
+          </button>
+        </div>
+        <form className="h-full w-full flex gap-2">
+          <input
+            type="text"
+            placeholder="Type here message..."
+            className="py-1 px-4 outline-none w-full h-full"
+            value={"hello"}
+          />
+          <button className="text-primary hover:text-secondary">
+            <IoMdSend size={28} />
+          </button>
+        </form>
+      </section>
+    </div>
+  );
+};
+
+export default Chatbot;
+
+
+
+
+
+
+
+
+
+
+import React, { useState } from "react";
+import Avatar from "./Avatar";
+import chatBotImage from "../images/chatbot.png";
+import { Link } from "react-router-dom";
+import { HiDotsVertical } from "react-icons/hi";
+import { FaAngleLeft } from "react-icons/fa6";
+import backgroundImage from "../images/bottbg.jpg";
+import { FaPlus } from "react-icons/fa6";
+import { IoMdSend } from "react-icons/io";
+
+const Chatbot = ({ onClose }) => {
+  const [message,setMessage]=useState("");
+
+  const handleMessage=(e)=>{
+    setMessage(e.target.value);
+  }
+  const handleOnsubmit=(e)=>{
+
+  }
+  return (
+    <div
+      style={{ backgroundImage: `url(${backgroundImage})` }}
+      className="bg-no-repeat bg-cover h-screen flex flex-col"
+    >
+      {/* Header */}
+      <header className="sticky top-0 h-16 bg-white flex justify-between items-center px-4">
+        <div className="flex items-center gap-4">
+          <Link to={"/"} className="lg:hidden">
+            <FaAngleLeft size={25} />
+          </Link>
+          <div>
+            <Avatar
+              width={50}
+              height={50}
+              imageUrl={chatBotImage}
+              name={"AI"}
+              userId={"39834"}
+            />
+          </div>
+          <div>
+            <h3 className="font-semibold text-lg my-0 text-ellipsis line-clamp-1">
+              {"AI"}
+            </h3>
+            <p className="-my-2 text-sm">
+              <span className="text-primary">online</span>
+            </p>
+          </div>
+        </div>
+        <div>
+          <button className="cursor-pointer hover:text-primary">
+            <HiDotsVertical />
+          </button>
+        </div>
+      </header>
+
+      {/* Messages Section */}
+      <section className="flex-1 overflow-y-scroll scrollbar bg-slate-200 bg-opacity-50 px-4 py-2">
+        {/* Example messages */}
+        <div className="flex flex-col gap-2">
+          
+          <div className="bg-white p-2 rounded-lg w-fit max-w-xs self-start shadow-md">
+            <p className="text-sm">Hello, how can I assist you?</p>
+            <p className="text-xs text-gray-500 text-right mt-1">10:16 AM</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Input Section */}
+      <section className="h-16 bg-white flex items-center px-4">
+        <form className="h-full w-full flex gap-2">
+          <input
+            type="text"
+            placeholder="Type here message..."
+            onChange={handleMessage}
+            value={message}
+            className="py-1 px-4 outline-none w-full h-full border border-gray-300 rounded-lg"
+          />
+          <button className="text-primary hover:text-secondary">
+            <IoMdSend size={28} />
+          </button>
+        </form>
+      </section>
+    </div>
+  );
+};
+
+export default Chatbot;
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useState } from "react";
+import { IoMdSend } from "react-icons/io";
+import axios from "axios";
+const Chatbot = ({ userId }) => {
+  const [messages, setMessages] = useState([]);
+  const [userInput, setUserInput] = useState("");
+
+  const sendMessage = async () => {
+    if (!userInput.trim()) return;
+
+    // Add user message to the chat
+    const newMessage = { sender: "user", text: userInput };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    try {
+      // Send user input to the backend
+      const response = await axios.get(
+        `http://localhost:8080/api/chatbot/676144dbbbcb946700b3f183`,
+        {
+          params: {
+            prompt: userInput, // Send the user input as a query parameter
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = response?.data;
+
+      const botMessage = { sender: "bot", text: data.message };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
+    } catch (error) {
+      const errorMessage = {
+        sender: "bot",
+        text: "Oops! Something went wrong. Please try again later.",
+      };
+      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+    }
+
+    setUserInput(""); // Clear the input field
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      {/* Chat Messages */}
+      <div
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          padding: "10px",
+          border: "1px solid #ddd",
+          marginBottom: "10px",
+          borderRadius: "5px",
+          backgroundColor: "#f9f9f9",
+        }}
+      >
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            style={{
+              marginBottom: "10px",
+              textAlign: msg.sender === "user" ? "right" : "left",
+            }}
+          >
+            <div
+              style={{
+                display: "inline-block",
+                padding: "10px",
+                borderRadius: "10px",
+                backgroundColor: msg.sender === "user" ? "#daf7a6" : "#d3d3d3",
+              }}
+            >
+              {msg.text}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Input Field */}
+      <div style={{ display: "flex" }}>
+        <input
+          type="text"
+          placeholder="Type your message..."
+          value={userInput}
+          onChange={(e) => setUserInput(e.target.value)}
+          style={{
+            flex: 1,
+            padding: "10px",
+            border: "1px solid #ddd",
+            borderRadius: "5px",
+            marginRight: "5px",
+          }}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+        />
+        <button
+          onClick={sendMessage}
+          style={{
+            padding: "10px",
+            border: "none",
+            backgroundColor: "#28a745",
+            color: "white",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          <IoMdSend />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Chatbot;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
