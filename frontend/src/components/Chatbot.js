@@ -24,7 +24,7 @@ const Chatbot = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/chatbot-Message",
+          `${process.env.REACT_APP_BACKEND_URL}/api/chatbot-Message`,
           {
             params: { id: userId },
             headers: { "Content-Type": "application/json" },
@@ -51,7 +51,7 @@ const Chatbot = () => {
     try {
       // Send user input to the backend
       const response = await axios.get(
-        `http://localhost:8080/api/chatbot/676144dbbbcb946700b3f183`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/chatbot/${user._id}`,
         {
           params: { prompt: Message, id: user._id },
           headers: { "Content-Type": "application/json" },
