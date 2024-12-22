@@ -3,12 +3,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Avatar from "../components/Avatar";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io"; // Import eye icons
 import { useDispatch } from "react-redux";
 import { setToken } from "../redux/userSlice";
+
 const CheckPassword = () => {
   const [data, setData] = useState({
     password: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,6 +27,7 @@ const CheckPassword = () => {
       };
     });
   };
+
   useEffect(() => {
     if (!location?.state?.name) {
       navigate("/email");
@@ -44,7 +49,7 @@ const CheckPassword = () => {
           password: data.password,
         },
         withCredentials: true,
-      });  
+      });
       toast.success(res.data.message);
 
       if (res.data.success) {
@@ -59,6 +64,7 @@ const CheckPassword = () => {
       toast.error(err?.response?.data?.message);
     }
   };
+
   return (
     <div>
       <div className="mt-5">
@@ -76,29 +82,42 @@ const CheckPassword = () => {
           </div>
           <form className="grid gap-4 mt-2" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-1">
-              <label htmlFor="password ">password :</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter Your password"
-                className="bg-slate-100 pxc-2 py-1  focus:outline-primary"
-                onChange={handleOnChange}
-                value={data.password}
-                required
-              />
+              <label htmlFor="password">Password :</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"} // Toggle input type based on state
+                  id="password"
+                  name="password"
+                  placeholder="Enter Your Password"
+                  className="bg-slate-100 pxc-2 py-1 focus:outline-primary w-full"
+                  onChange={handleOnChange}
+                  value={data.password}
+                  required
+                />
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2"
+                  onClick={() => setShowPassword((prev) => !prev)} // Toggle the password visibility
+                >
+                  {showPassword ? (
+                    <IoIosEyeOff size={24} />
+                  ) : (
+                    <IoIosEye size={24} />
+                  )}
+                </button>
+              </div>
             </div>
 
-            <button className="bg-primary textlg px-4 py-1 hover:bg-secondary rounded mt-2 font-bold text-white leading-relaxed tracking-wide">
+            <button className="bg-primary text-lg px-4 py-1 hover:bg-secondary rounded mt-2 font-bold text-white leading-relaxed tracking-wide">
               Login
             </button>
           </form>
-          <p className="my-3 text-center ">
+          <p className="my-3 text-center">
             <Link
               to={"/forgot-password"}
               className="hover:text-primary font-semibold"
             >
-              Forgot password ?
+              Forgot password?
             </Link>
           </p>
         </div>

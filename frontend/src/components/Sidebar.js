@@ -99,7 +99,7 @@ const Sidebar = () => {
             className="flex items-center gap-2 py-3 px-2 border border-transparent hover:border-primary rounded hover:bg-slate-100 cursor-pointer"
           >
             <div
-              title="Chatbot"
+              title="BUDDY"
               onClick={() => {
                 setOpenChatBot(true);
                 setOpenChatBot(false);
